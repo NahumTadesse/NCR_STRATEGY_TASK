@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { addEntry, canUndo, diffItem, HISTORY_LIMIT, undoLatest } from './history'
+import { addEntry, canUndo, diffItem, HISTORY_LIMIT, recordChange, undoLatest } from './history'
 import type { ChangeEntry } from './history'
 import { createSeedState } from './seed'
 import type { AppState } from './types'
@@ -110,5 +110,44 @@ describe('undoLatest', () => {
     const snapshot = JSON.stringify({ next, history })
     undoLatest(next, history)
     expect(JSON.stringify({ next, history })).toBe(snapshot)
+  })
+})
+
+describe('recordChange', () => {
+  it('records a price edit as one entry for one store', () => {
+    const next = setPrice(base, 'uptown', 'fries', 600)
+    const history = recordChange([], base, next, 'fries', 'price', 1234)
+    expect(history).toEqual([
+      {
+        id: 1,
+        at: 1234,
+        itemId: 'fries',
+        kind: 'price',
+        changes: diffItem(base, next, 'fries'),
+        undone: false,
+      },
+    ])
+  })
+
+  it('records an apply batch as one entry covering every changed store', () => {
+    const edited = setPrice(base, 'downtown', 'fries', 600)
+    const { state: next } = applyPriceToStores(edited, 'downtown', 'fries', ['uptown', 'westside'])
+    const history = recordChange([], edited, next, 'fries', 'apply', 0)
+    expect(history).toHaveLength(1)
+    expect(history[0].changes.map((c) => c.storeId)).toEqual(['uptown', 'westside'])
+  })
+
+  it('skips actions that changed nothing and returns the same array', () => {
+    const history: ChangeEntry[] = []
+    expect(recordChange(history, base, base, 'fries', 'price', 0)).toBe(history)
+  })
+
+  it('gives each entry the next id, newest first', () => {
+    const a = setPrice(base, 'uptown', 'fries', 600)
+    const b = setAvailability(a, 'uptown', 'fries', false)
+    const h1 = recordChange([], base, a, 'fries', 'price', 0)
+    const h2 = recordChange(h1, a, b, 'fries', 'availability', 0)
+    expect(h2.map((e) => e.id)).toEqual([2, 1])
+    expect(h2[0].kind).toBe('availability')
   })
 })

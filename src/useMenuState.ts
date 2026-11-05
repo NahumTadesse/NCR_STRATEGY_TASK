@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { addEntry, canUndo, diffItem, undoLatest } from './domain/history'
+import { canUndo, recordChange, undoLatest } from './domain/history'
 import type { ChangeEntry, UndoResult } from './domain/history'
 import { createSeedState } from './domain/seed'
 import { loadState, parseStoredText, saveState, STORAGE_KEY } from './domain/storage'
@@ -21,7 +21,7 @@ export function useMenuState() {
   const [initial] = useState(() => loadState())
   const [state, setState] = useState<AppState>(initial.state)
   const [saveFailed, setSaveFailed] = useState(false)
-  const [history, setHistory] = useState<ChangeEntry[]>([])
+  const [history, setHistory] = useState<readonly ChangeEntry[]>([])
 
   function save(next: AppState) {
     setState(next)
@@ -32,11 +32,7 @@ export function useMenuState() {
   function commit(next: AppState, record?: { itemId: ItemId; kind: ChangeEntry['kind'] }) {
     if (next === state) return
     if (record) {
-      const changes = diffItem(state, next, record.itemId)
-      if (changes.length > 0) {
-        const entry = { id: (history[0]?.id ?? 0) + 1, at: Date.now(), ...record, changes, undone: false }
-        setHistory(addEntry(history, entry))
-      }
+      setHistory(recordChange(history, state, next, record.itemId, record.kind, Date.now()))
     }
     save(next)
   }

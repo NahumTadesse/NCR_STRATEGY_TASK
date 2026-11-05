@@ -43,6 +43,25 @@ export function addEntry(history: readonly ChangeEntry[], entry: ChangeEntry): C
   return [entry, ...history].slice(0, HISTORY_LIMIT)
 }
 
+/**
+ * Record one user action. Compares the item across all stores before and
+ * after, so an apply batch becomes one entry with several stores. Returns
+ * the same history array when nothing changed (no empty entries).
+ */
+export function recordChange(
+  history: readonly ChangeEntry[],
+  prev: AppState,
+  next: AppState,
+  itemId: ItemId,
+  kind: ChangeEntry['kind'],
+  at: number,
+): readonly ChangeEntry[] {
+  const changes = diffItem(prev, next, itemId)
+  if (changes.length === 0) return history
+  const id = (history[0]?.id ?? 0) + 1
+  return addEntry(history, { id, at, itemId, kind, changes, undone: false })
+}
+
 /** Only the newest entry can be undone, and only once. */
 export function canUndo(history: readonly ChangeEntry[]): boolean {
   return history.length > 0 && !history[0].undone
