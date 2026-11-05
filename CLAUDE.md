@@ -8,7 +8,11 @@ price or availability for their selected store. 4 locations, sample data only.
   summarize what changed and where (`path:line`).
 - Work in small slices. After each slice run `npm run lint` and `npm run build`
   (and `npm test` once Vitest exists) and report results honestly.
-- Ask before deleting files or installing new packages.
+- Ask before deleting files or installing new packages. Also ask before npm
+  override flags such as `--legacy-peer-deps` or `--force`.
+- The 40-line limit covers the whole turn, including tool output. Trim command
+  output with `tail`, `head` or `--stat`.
+- Work only inside this project folder.
 - After a slice passes lint, build and tests, commit with a short, clear
   message. Never push; the user pushes.
 - README and UI text: plain language, no em dashes.
@@ -34,6 +38,9 @@ price or availability for their selected store. 4 locations, sample data only.
 - **Selected store** is remembered in localStorage; defaults to the first store.
 - **Recent changes** list (store, item, before, after, time) with undo for the
   most recent change only (slice 8).
+- **Saved data problems:** if saved data was invalid and replaced with sample
+  data, show a small notice. Slice 8 adds a "Reset sample data" button.
+- **Price input** also accepts a trailing dot ("4.") and a space after "$" ("$ 4.50").
 - **Money:** prices are integer cents, stored per store. Never use floats for
   stored values; parse/format only at the UI boundary.
 
