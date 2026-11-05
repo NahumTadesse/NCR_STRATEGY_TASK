@@ -5,13 +5,16 @@ interface Props {
   onReset: () => void
 }
 
-/** Two-step reset: the first click asks, the second one does it. */
+/**
+ * Demo tool for reviewers, not a manager feature: it changes all stores.
+ * Two-step reset: the first click asks, the second one does it.
+ */
 export function ResetSampleData({ storeCount, onReset }: Props) {
   const [confirming, setConfirming] = useState(false)
 
   return (
-    <section className="panel panel--quiet" aria-labelledby="sample-data-title">
-      <h2 id="sample-data-title" className="panel__title">Sample data</h2>
+    <section className="panel panel--quiet" aria-labelledby="demo-tools-title">
+      <h2 id="demo-tools-title" className="panel__title">Demo tools</h2>
       {confirming ? (
         <div className="confirm" role="group" aria-label="Confirm reset">
           <p className="confirm__text">
@@ -37,7 +40,8 @@ export function ResetSampleData({ storeCount, onReset }: Props) {
       ) : (
         <>
           <p className="panel__empty">
-            Everything here is sample data saved in this browser only.
+            For reviewers trying out this demo. Not part of a store manager's tools. All
+            data is sample data saved in this browser only.
           </p>
           <button type="button" className="button" onClick={() => setConfirming(true)}>
             Reset sample data

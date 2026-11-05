@@ -44,7 +44,9 @@ price or availability for their selected store. 4 locations, sample data only.
 - **Recent changes** list (store, item, before, after, time) with undo for the
   most recent change only (slice 8).
 - **Saved data problems:** if saved data was invalid and replaced with sample
-  data, show a small notice. Slice 8 adds a "Reset sample data" button.
+  data, show a small notice.
+- **"Reset sample data"** lives in a "Demo tools" section for reviewers only.
+  It is not a manager feature, since it changes all stores.
 - **Price input** also accepts a trailing dot ("4.") and a space after "$" ("$ 4.50").
 - **Money:** prices are integer cents, stored per store. Never use floats for
   stored values; parse/format only at the UI boundary.

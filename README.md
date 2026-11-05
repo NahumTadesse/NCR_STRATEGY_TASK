@@ -32,8 +32,13 @@ npm run build    # type check and production build into dist/
   to stores you choose. See below.
 - **Recent changes.** Each change in this session, with store, item, before,
   after and time. The most recent change can be undone.
-- **Reset sample data.** Puts all 4 stores back to the original sample data,
-  after a confirm step.
+
+## Demo tools
+
+The "Demo tools" section at the bottom of the page has a "Reset sample data"
+button. It puts all 4 stores back to the original sample data, after a confirm
+step. It exists only so reviewers can start fresh. It is not a manager feature,
+since it changes every store.
 
 ## The location conflict and how it is handled
 
@@ -63,7 +68,7 @@ that wrong silently changes prices at stores the manager does not run.
 
 ## How it was tested
 
-- **Unit tests (Vitest, 103 tests)** cover the logic in `src/domain/`:
+- **Unit tests (Vitest)** cover the logic in `src/domain/`. Run them with `npm test`.
   - price parsing and limits
   - edits that touch only the selected store and never change the input data
   - apply-to-stores preview and confirm, including recalculating at confirm time
