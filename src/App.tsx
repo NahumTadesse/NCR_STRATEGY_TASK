@@ -37,12 +37,15 @@ function App() {
   function undo(): boolean {
     const latest = menu.history[0]
     const name = state.items.find((i) => i.id === latest?.itemId)?.name ?? 'The item'
+    const stores = listFormat.format(
+      (latest?.changes ?? []).map((c) => STORES.find((s) => s.id === c.storeId)?.name ?? c.storeId),
+    )
     const result = menu.undo()
     setMessage(
       result.ok
-        ? { text: `Undid the last change to ${name}.`, tone: 'ok' }
+        ? { text: `Undid the last change to ${name} at ${stores}.`, tone: 'ok' }
         : {
-            text: `Could not undo. ${name} was changed again since then, possibly in another tab.`,
+            text: `Could not undo. ${name} at ${stores} was changed again since then, possibly in another tab.`,
             tone: 'warn',
           },
     )
