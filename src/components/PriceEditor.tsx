@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent } from 'react'
 import { centsToInputValue, formatCents, parseDollarsToCents } from '../domain/money'
 
@@ -15,6 +15,8 @@ export function PriceEditor({ itemName, storeName, priceCents, onSave, onApplyTo
   const [draft, setDraft] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const errorId = useId()
+  // After Save or Cancel, put focus back on the Edit button so keyboard users keep their place.
+  const focusEditOnMount = useRef(false)
 
   function startEditing() {
     setDraft(centsToInputValue(priceCents))
@@ -22,6 +24,7 @@ export function PriceEditor({ itemName, storeName, priceCents, onSave, onApplyTo
   }
 
   function cancel() {
+    focusEditOnMount.current = true
     setDraft(null)
     setError(null)
   }
@@ -49,6 +52,12 @@ export function PriceEditor({ itemName, storeName, priceCents, onSave, onApplyTo
           type="button"
           className="link-button"
           onClick={startEditing}
+          ref={(el) => {
+            if (el && focusEditOnMount.current) {
+              focusEditOnMount.current = false
+              el.focus()
+            }
+          }}
           aria-label={`Edit price of ${itemName} at ${storeName}`}
         >
           Edit

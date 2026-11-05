@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface Props {
   storeCount: number
@@ -11,6 +11,13 @@ interface Props {
  */
 export function ResetSampleData({ storeCount, onReset }: Props) {
   const [confirming, setConfirming] = useState(false)
+  // After Reset or Cancel, put focus back on the Reset sample data button.
+  const focusResetOnMount = useRef(false)
+
+  function close() {
+    focusResetOnMount.current = true
+    setConfirming(false)
+  }
 
   return (
     <section className="panel panel--quiet" aria-labelledby="demo-tools-title">
@@ -22,7 +29,7 @@ export function ResetSampleData({ storeCount, onReset }: Props) {
             sample data and clears recent changes. It cannot be undone.
           </p>
           <div className="confirm__actions">
-            <button type="button" className="button" onClick={() => setConfirming(false)} autoFocus>
+            <button type="button" className="button" onClick={close} autoFocus>
               Cancel
             </button>
             <button
@@ -30,7 +37,7 @@ export function ResetSampleData({ storeCount, onReset }: Props) {
               className="button button--danger"
               onClick={() => {
                 onReset()
-                setConfirming(false)
+                close()
               }}
             >
               Reset all stores
@@ -43,7 +50,17 @@ export function ResetSampleData({ storeCount, onReset }: Props) {
             For reviewers trying out this demo. Not part of a store manager's tools. All
             data is sample data saved in this browser only.
           </p>
-          <button type="button" className="button" onClick={() => setConfirming(true)}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => setConfirming(true)}
+            ref={(el) => {
+              if (el && focusResetOnMount.current) {
+                focusResetOnMount.current = false
+                el.focus()
+              }
+            }}
+          >
             Reset sample data
           </button>
         </>

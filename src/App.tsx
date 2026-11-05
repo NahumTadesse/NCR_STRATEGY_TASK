@@ -34,7 +34,7 @@ function App() {
     setApplyItemId(null)
   }
 
-  function undo() {
+  function undo(): boolean {
     const latest = menu.history[0]
     const name = state.items.find((i) => i.id === latest?.itemId)?.name ?? 'The item'
     const result = menu.undo()
@@ -46,6 +46,7 @@ function App() {
             tone: 'warn',
           },
     )
+    return result.ok
   }
 
   function resetSampleData() {

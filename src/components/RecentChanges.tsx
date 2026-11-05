@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import type { ChangeEntry } from '../domain/history'
 import { formatCents } from '../domain/money'
 import { STORES } from '../domain/seed'
@@ -7,7 +8,8 @@ interface Props {
   history: readonly ChangeEntry[]
   items: readonly MenuItem[]
   canUndo: boolean
-  onUndo: () => void
+  /** Returns true if the undo happened. */
+  onUndo: () => boolean
 }
 
 const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' })
@@ -30,10 +32,17 @@ function storeName(id: string): string {
 /** Changes made in this session, newest first. Only the newest can be undone. */
 export function RecentChanges({ history, items, canUndo, onUndo }: Props) {
   const itemName = (id: string) => items.find((i) => i.id === id)?.name ?? id
+  const titleRef = useRef<HTMLHeadingElement>(null)
+
+  // The Undo button disappears after a successful undo, so move focus to the
+  // section heading instead of letting it fall to the top of the page.
+  function undo() {
+    if (onUndo()) titleRef.current?.focus()
+  }
 
   return (
     <section className="panel" aria-labelledby="recent-changes-title">
-      <h2 id="recent-changes-title" className="panel__title">Recent changes</h2>
+      <h2 id="recent-changes-title" className="panel__title" ref={titleRef} tabIndex={-1}>Recent changes</h2>
       {history.length === 0 ? (
         <p className="panel__empty">
           No changes yet in this session. Price and availability changes will show here.
@@ -83,7 +92,7 @@ export function RecentChanges({ history, items, canUndo, onUndo }: Props) {
                               <button
                                 type="button"
                                 className="button"
-                                onClick={onUndo}
+                                onClick={undo}
                                 aria-label={`Undo last change: ${name} at ${stores}`}
                               >
                                 Undo

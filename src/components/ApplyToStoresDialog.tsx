@@ -25,11 +25,19 @@ export function ApplyToStoresDialog({ state, sourceStore, item, onConfirm, onClo
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [picked, setPicked] = useState<StoreId[]>([])
   const titleId = useId()
+  // Remember what opened the dialog (captured once, before it opens) so focus
+  // can go back to it on close or confirm.
+  const [opener] = useState(() =>
+    document.activeElement instanceof HTMLElement ? document.activeElement : null,
+  )
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (dialog && !dialog.open) dialog.showModal()
-  }, [])
+    return () => {
+      if (opener?.isConnected) opener.focus()
+    }
+  }, [opener])
 
   const otherStores = STORES.filter((s) => s.id !== sourceStore.id)
   const newPrice = state.byStore[sourceStore.id][item.id].priceCents
