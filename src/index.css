@@ -1,56 +1,70 @@
-/* Design tokens. Light only: this is a back-office screen used in lit kitchens. */
+/* Design tokens: a warm harbor palette. Navy ink, sand page, white paper,
+   one brass accent. Store colors (App.css) carry meaning. */
 :root {
-  --bg: #f2f4f5;
-  --surface: #ffffff;
-  --surface-sunk: #f6f8f9;
-  --ink: #14212b;
-  --ink-muted: #4a5863;
-  --rule: #d3dadf;
-  --rule-strong: #b9c3ca;
-  --switch-off: #6b7780;
+  --navy: #13263a;
+  --ink: #13263a;
+  --ink-muted: #5c5446;
+  --sand: #f5efe4;
+  --paper: #ffffff;
+  --paper-sunk: #faf6ef;
+  --rule: #e6dccb;
+  --rule-strong: #c9bba3;
+  --brass: #9c7426; /* lines and marks only */
+  --brass-text: #7a5a1c; /* brass when used as text */
+  --brass-light: #d9b26a; /* brass on navy */
+  --flash: #f3e3bf;
+  --switch-off: #7a6f60;
 
   --ok: #1c6b3a;
-  --ok-bg: #e4f1e8;
+  --ok-bg: #e3f0e6;
   --stop: #9a3412;
-  --stop-bg: #fbeae1;
+  --stop-bg: #fbe8de;
   --warn-edge: #b7791f;
-  --warn-bg: #fff6e0;
+  --warn-bg: #fff1cf;
   --error: #b42318;
 
-  --radius-sm: 4px;
-  --radius: 6px;
+  --radius-sm: 6px;
+  --radius: 10px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 24px;
-  --space-6: 32px;
+  --space-6: 40px;
+  --space-7: 56px;
 
   --text-sm: 0.8125rem; /* 13px */
   --text-base: 0.9375rem; /* 15px */
   --text-lg: 1.0625rem; /* 17px */
-  --text-xl: 1.75rem; /* 28px */
+
+  --font-body: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Big Shoulders Variable', 'Arial Narrow', 'Roboto Condensed', var(--font-body);
+
+  --shadow-card: 0 1px 2px rgb(19 38 58 / 0.06), 0 10px 28px rgb(19 38 58 / 0.07);
+
+  /* Wave from the logo, as masks: a filled edge and a thin line. */
+  --wave-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 8'%3E%3Cpath d='M0 0H24V3.5Q18 8 12 3.5T0 3.5Z'/%3E%3C/svg%3E");
+  --wave-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 8'%3E%3Cpath d='M0 4Q6 0.5 12 4T24 4' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E");
 
   color-scheme: light;
-  font-family: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  font-size: 100%;
+  font-family: var(--font-body);
   line-height: 1.5;
   color: var(--ink);
-  background: var(--bg);
+  background: var(--sand);
   -webkit-font-smoothing: antialiased;
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); font-size: var(--text-base); }
+body { margin: 0; background: var(--sand); font-size: var(--text-base); }
 button, input, select { font: inherit; color: inherit; }
 
-/* One focus style everywhere: ink ring with a white halo, visible on any color. */
+/* One focus style everywhere: navy ring with a white halo, visible on any color. */
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--navy);
   outline-offset: 2px;
   box-shadow: 0 0 0 5px #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  * { transition: none !important; animation: none !important; }
 }

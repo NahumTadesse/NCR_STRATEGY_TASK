@@ -19,7 +19,11 @@ export function AvailabilityToggle({ itemName, storeName, available, onChange }:
       <span className="switch__track" aria-hidden="true">
         <span className="switch__thumb" />
       </span>
-      <span className="switch__text">{available ? 'Available' : 'Unavailable'}</span>
+      {/* The state text is styled as a pill, so the row shows it once, not twice. */}
+      <span className="switch__text">
+        <span className="switch__dot" aria-hidden="true" />
+        {available ? 'Available' : 'Unavailable'}
+      </span>
     </button>
   )
 }

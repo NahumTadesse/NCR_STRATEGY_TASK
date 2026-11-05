@@ -1,6 +1,8 @@
 import { groupByCategory } from '../domain/menu'
-import type { ItemId, MenuItem, Store, StoreMenu } from '../domain/types'
+import { useState } from 'react'
+import type { ItemId, MenuItem, Store, StoreItemState, StoreMenu } from '../domain/types'
 import { AvailabilityToggle } from './AvailabilityToggle'
+import { CategoryIcon } from './CategoryIcon'
 import { PriceEditor } from './PriceEditor'
 
 interface Props {
@@ -27,36 +29,83 @@ export function MenuTable({ store, items, menu, onSetPrice, onSetAvailability, o
         {groupByCategory(items).map((group) => (
           <tbody key={group.category}>
             <tr className="menu-table__category">
-              <th scope="colgroup" colSpan={3}>{group.category}</th>
+              <th scope="colgroup" colSpan={3}>
+                <span className="menu-table__category-label">
+                  <CategoryIcon category={group.category} />
+                  {group.category}
+                  <span className="wave-rule" aria-hidden="true" />
+                </span>
+              </th>
             </tr>
-            {group.items.map((item) => {
-              const entry = menu[item.id]
-              return (
-                <tr key={item.id} className={entry.available ? '' : 'is-unavailable'}>
-                  <th scope="row">{item.name}</th>
-                  <td className="num">
-                    <PriceEditor
-                      itemName={item.name}
-                      storeName={store.name}
-                      priceCents={entry.priceCents}
-                      onSave={(cents) => onSetPrice(item.id, cents)}
-                      onApplyToOthers={() => onApplyToOthers(item.id)}
-                    />
-                  </td>
-                  <td>
-                    <AvailabilityToggle
-                      itemName={item.name}
-                      storeName={store.name}
-                      available={entry.available}
-                      onChange={(available) => onSetAvailability(item.id, available)}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+            {group.items.map((item) => (
+              <MenuRow
+                key={item.id}
+                item={item}
+                entry={menu[item.id]}
+                storeName={store.name}
+                onSetPrice={onSetPrice}
+                onSetAvailability={onSetAvailability}
+                onApplyToOthers={onApplyToOthers}
+              />
+            ))}
           </tbody>
         ))}
       </table>
     </div>
+  )
+}
+
+interface RowProps {
+  item: MenuItem
+  entry: StoreItemState
+  storeName: string
+  onSetPrice: Props['onSetPrice']
+  onSetAvailability: Props['onSetAvailability']
+  onApplyToOthers: Props['onApplyToOthers']
+}
+
+/**
+ * One menu row. When its price or availability changes, the row gets a brief
+ * highlight. Alternating two animation classes restarts the CSS animation
+ * without remounting the row, so keyboard focus stays where it is.
+ */
+function MenuRow({ item, entry, storeName, onSetPrice, onSetAvailability, onApplyToOthers }: RowProps) {
+  const signature = `${entry.priceCents}:${entry.available}`
+  const [seen, setSeen] = useState(signature)
+  const [flashes, setFlashes] = useState(0)
+  if (seen !== signature) {
+    // Adjusting state during render is React's recommended pattern for this.
+    setSeen(signature)
+    setFlashes((n) => n + 1)
+  }
+
+  const classes = [
+    entry.available ? '' : 'is-unavailable',
+    flashes === 0 ? '' : flashes % 2 ? 'is-changed-a' : 'is-changed-b',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  return (
+    <tr className={classes || undefined}>
+      <th scope="row">{item.name}</th>
+      <td className="num">
+        <PriceEditor
+          itemName={item.name}
+          storeName={storeName}
+          priceCents={entry.priceCents}
+          onSave={(cents) => onSetPrice(item.id, cents)}
+          onApplyToOthers={() => onApplyToOthers(item.id)}
+        />
+      </td>
+      <td>
+        <AvailabilityToggle
+          itemName={item.name}
+          storeName={storeName}
+          available={entry.available}
+          onChange={(available) => onSetAvailability(item.id, available)}
+        />
+      </td>
+    </tr>
   )
 }
