@@ -45,3 +45,14 @@
 .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
 .badge--on { background: var(--on-bg); color: var(--on); }
 .badge--off { background: var(--off-bg); color: var(--off); }
+
+.price { display: inline-flex; gap: 10px; align-items: baseline; justify-content: flex-end; }
+.price__value { font-weight: 600; }
+.link-button { font: inherit; font-size: 0.85rem; background: none; border: 0; padding: 2px 4px; color: var(--focus); text-decoration: underline; cursor: pointer; }
+.price-form { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.price-form__row { display: inline-flex; gap: 6px; align-items: center; }
+.price-form__input { font: inherit; width: 6rem; padding: 4px 6px; text-align: right; border: 1px solid var(--border); border-radius: 6px; }
+.price-form__input[aria-invalid='true'] { border-color: var(--error); }
+.field-error { color: var(--error); font-size: 0.8rem; max-width: 18rem; text-align: right; }
+.button { font: inherit; font-size: 0.85rem; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; }
+.button--primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }

@@ -16,6 +16,9 @@ describe('parseDollarsToCents', () => {
     ['19.99', 1999],
     ['99.99', 9999],
     ['  12.30  ', 1230],
+    ['4.', 400],
+    ['$ 4.50', 450],
+    ['$  .5', 50],
   ])('parses %j as %i cents', (input, cents) => {
     expect(parseDollarsToCents(input)).toEqual({ ok: true, cents })
   })
@@ -30,7 +33,7 @@ describe('parseDollarsToCents', () => {
     expect(parseDollarsToCents(input)).toEqual({ ok: false, error: 'Enter a price.' })
   })
 
-  it.each(['abc', '-1', '1.234', '$', '.', '1,50', '4.', '1e2', '$ 4.50'])(
+  it.each(['abc', '-1', '1.234', '$', '.', '1,50', '1e2', '$.', '4 .50', '4.5 0', '$$4'])(
     'rejects malformed input %j',
     (input) => {
       expect(parseDollarsToCents(input).ok).toBe(false)

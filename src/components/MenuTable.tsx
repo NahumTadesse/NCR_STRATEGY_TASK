@@ -1,14 +1,15 @@
 import { groupByCategory } from '../domain/menu'
-import { formatCents } from '../domain/money'
-import type { MenuItem, Store, StoreMenu } from '../domain/types'
+import type { ItemId, MenuItem, Store, StoreMenu } from '../domain/types'
+import { PriceEditor } from './PriceEditor'
 
 interface Props {
   store: Store
   items: readonly MenuItem[]
   menu: StoreMenu
+  onSetPrice: (itemId: ItemId, priceCents: number) => void
 }
 
-export function MenuTable({ store, items, menu }: Props) {
+export function MenuTable({ store, items, menu, onSetPrice }: Props) {
   return (
     <table className="menu-table">
       <caption>Menu at {store.name}</caption>
@@ -29,7 +30,14 @@ export function MenuTable({ store, items, menu }: Props) {
             return (
               <tr key={item.id} className={entry.available ? '' : 'is-unavailable'}>
                 <th scope="row">{item.name}</th>
-                <td className="num">{formatCents(entry.priceCents)}</td>
+                <td className="num">
+                  <PriceEditor
+                    itemName={item.name}
+                    storeName={store.name}
+                    priceCents={entry.priceCents}
+                    onSave={(cents) => onSetPrice(item.id, cents)}
+                  />
+                </td>
                 <td>
                   <span className={entry.available ? 'badge badge--on' : 'badge badge--off'}>
                     {entry.available ? 'Available' : 'Unavailable'}

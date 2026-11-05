@@ -5,7 +5,7 @@ import { STORES } from './domain/seed'
 import { useMenuState } from './useMenuState'
 
 function App() {
-  const { state, loadStatus, saveFailed, selectStore } = useMenuState()
+  const { state, loadStatus, saveFailed, selectStore, setPrice } = useMenuState()
   const store = STORES.find((s) => s.id === state.selectedStoreId) ?? STORES[0]
 
   return (
@@ -25,7 +25,14 @@ function App() {
         <p className="page__intro">
           Changes on this page apply to <strong>{store.name}</strong> only.
         </p>
-        <MenuTable store={store} items={state.items} menu={state.byStore[store.id]} />
+        {/* key resets any open edit when the store changes */}
+        <MenuTable
+          key={store.id}
+          store={store}
+          items={state.items}
+          menu={state.byStore[store.id]}
+          onSetPrice={setPrice}
+        />
       </main>
     </>
   )

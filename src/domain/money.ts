@@ -6,11 +6,12 @@ export type ParsePriceResult =
   | { ok: true; cents: number }
   | { ok: false; error: string }
 
-// Optional "$", whole dollars, optional 1 or 2 decimal places. ".5" is allowed.
-const PRICE_PATTERN = /^\$?(\d*)(?:\.(\d{1,2}))?$/
+// Optional "$" (spaces after it are fine), whole dollars, then an optional dot
+// with up to 2 decimal places. ".5" and "4." are allowed.
+const PRICE_PATTERN = /^\$?\s*(\d*)(?:\.(\d{0,2}))?$/
 
 /**
- * Parse user input like "4.5", "$4.50" or ".99" into integer cents.
+ * Parse user input like "4.5", "$4.50", "$ 4.50", "4." or ".99" into integer cents.
  * Uses string math only, so there is no floating point drift.
  */
 export function parseDollarsToCents(input: string): ParsePriceResult {
@@ -20,7 +21,7 @@ export function parseDollarsToCents(input: string): ParsePriceResult {
   }
 
   const match = PRICE_PATTERN.exec(trimmed)
-  if (!match || (match[1] === '' && match[2] === undefined)) {
+  if (!match || (match[1] === '' && !match[2])) {
     return { ok: false, error: 'Enter a price like 4.50.' }
   }
 
