@@ -5,7 +5,8 @@ import { STORES } from './domain/seed'
 import { useMenuState } from './useMenuState'
 
 function App() {
-  const { state, loadStatus, saveFailed, selectStore, setPrice } = useMenuState()
+  const { state, loadStatus, saveFailed, selectStore, setPrice, setAvailability } =
+    useMenuState()
   const store = STORES.find((s) => s.id === state.selectedStoreId) ?? STORES[0]
 
   return (
@@ -32,6 +33,7 @@ function App() {
           items={state.items}
           menu={state.byStore[store.id]}
           onSetPrice={setPrice}
+          onSetAvailability={setAvailability}
         />
       </main>
     </>

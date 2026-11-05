@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { loadState, saveState } from './domain/storage'
 import type { AppState, ItemId, StoreId } from './domain/types'
-import { selectStore as selectStoreIn, setPrice as setPriceIn } from './domain/updates'
+import {
+  selectStore as selectStoreIn,
+  setAvailability as setAvailabilityIn,
+  setPrice as setPriceIn,
+} from './domain/updates'
 
 /**
  * Owns app state: loads once from localStorage and saves on every change.
@@ -28,5 +32,8 @@ export function useMenuState() {
     /** Change a price at the selected store only. */
     setPrice: (itemId: ItemId, priceCents: number) =>
       commit(setPriceIn(state, state.selectedStoreId, itemId, priceCents)),
+    /** Mark an item available or not at the selected store only. */
+    setAvailability: (itemId: ItemId, available: boolean) =>
+      commit(setAvailabilityIn(state, state.selectedStoreId, itemId, available)),
   }
 }
