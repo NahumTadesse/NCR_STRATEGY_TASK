@@ -1,0 +1,145 @@
+
+Claude
+AI_SALES_ENGINEER_APPLICATION_TASK_V1.3.md
+AI_SALES_ENGINEER_APPLICATION_
+TASK_V1.3
+.md
+41 lines
+MD
+ok give steps to do this well first start off by having me fully understand the problem in simple easy to understand bullets
+
+Heads up first: this chat counts as part of your transcript. The 40-line limit applies to my replies too, so I’ll keep each one short. Don’t delete or edit anything in this conversation.
+
+What they’re really testing
+
+This is for an AI Sales Engineer role, so it’s not just about code. They want to see how you work with AI, how you handle two stakeholders who disagree, and whether you can build something a non-technical customer could use.
+The scenario
+
+Harbor Street Kitchen is a restaurant group with 4 locations.
+Each store manager needs to see the menu and make changes for their own store.
+Changes apply to one location only. If one store raises a burger to $12, the other three keep their own price.
+What the app must do
+
+Make it obvious which store is selected.
+Show at least 5 menu items, each with a name, category, price, and availability.
+Let the manager change an item’s price at that store.
+Let the manager mark an item available or unavailable at that store.
+Fake sample data is fine. You don’t need a backend, a login, or payments.
+The conflict (the real test)
+
+The ops leader wants managers to update every store from one screen so nothing gets delayed.
+The IT lead says a manager must never accidentally change another store.
+You choose how the app handles this and explain why. Pay attention to the word “accidentally.” It suggests the answer doesn’t have to be all-or-nothing.
+What you turn in
+
+The working app, plus short instructions for opening it.
+A short explanation of how you handled the conflict.
+A full transcript, in order, of every message with every AI tool you used. Screenshots or recordings don’t count.
+Rules that are easy to miss
+
+Every AI reply has to be 40 lines or fewer (tables don’t count). If you use Claude Code or another tool, tell it about this limit too.
+If you use two AI tools, both transcripts have to be included.
+Don’t use any real customer data or company material.
+What “good UX, technically sound” means here
+
+It’s hard to make mistakes: the app shows what changed and asks before saving risky edits.
+Bad input is handled, like empty or negative prices.
+Price and availability are stored separately for each store, not as one shared value.
+Want the step-by-step plan next?
+
+what do you think is best step forwards
+
+I’d do it in this order, since your conflict decision shapes the whole design.
+
+1. Decide the conflict first
+
+By default, managers can only edit the store they’ve selected.
+For other stores, add a separate “Apply to other stores” step. The manager checks which stores, sees a before/after preview, and confirms.
+This gives ops the speed they want and still meets IT’s rule, because nothing changes at another store by accident.
+Keep availability store-only, since it’s usually about one kitchen running out of something.
+2. Pick a simple stack and one AI tool
+
+React + Vite + TypeScript (you already know it), with data saved in localStorage.
+Use one AI tool for the whole build so the transcript stays clean. Put the 40-line limit in your first prompt so it’s on record.
+3. Set up the data model before any UI
+
+Stores, menu items, and per-store settings for each item (price in cents, available).
+Storing prices in cents avoids rounding bugs.
+4. Build in small slices, testing each one
+
+Store selector, clear store header, menu table
+Price editing with validation (no blank, negative, or absurd values)
+Availability toggle
+“Apply to other stores” with preview and confirm
+Save to localStorage, plus a “Reset sample data” button
+5. Polish and test like a reviewer would
+
+Keep the store name visible at all times, maybe with a color per store. Show a message after each save.
+Make sure it works on a phone-sized screen.
+Switch stores, edit, refresh, enter bad prices, and check that the other stores didn’t change.
+6. Write a short README
+
+How to run it, your conflict decision in a few sentences, and any assumptions you made.
+7. Export and check the transcript
+
+Make sure it’s complete, in order, and every reply is under 40 lines. If you use Claude Code, it has an /export command.
+Want me to draft your first prompt for the build tool?
+
+Weighing copy-paste against the export option
+Right, the Claude Code one is done. For this chat, the only built-in way is your account’s data export. There’s no download button on the chat itself.
+
+Step by step:
+
+In this browser tab, click your initials or profile icon in the lower left corner of claude.ai.
+Click Settings.
+Click Privacy in the settings menu.
+Click Export data and confirm.
+Check your email at nahumtad123@gmail.com for a message from Anthropic, usually within a few minutes. Check spam too.
+Click the download link in the email, which saves a zip to your Downloads folder. The link expires after 24 hours.
+Then, in WSL, run step 3 from my last message (the ZIP=... block). It finds the zip, pulls out this chat, and stops right before assignment 2.
+
+If the email is taking too long, there’s a backup option: scroll to the top of this chat, press Ctrl+A then Ctrl+C, and paste it into a text file. It’s less clean than the export, with no timestamps and some page clutter mixed in, so only use it if the export doesn’t show up.
+
+
+Deciding that the full chat history must be included
+I get it, waiting that long isn’t worth it. But I’d still include this chat. The exercise asks for every message with every AI agent you used, and this chat is where your prompts and decisions came from. If a reviewer sees polished prompts in the Claude Code transcript with no record of where they came from, the submission looks incomplete, which is the opposite of what you want.
+
+The quick fix takes about 5 minutes, with no export needed:
+
+Scroll to the very top of this chat, so everything loads.
+Click inside the chat area, then press Ctrl+A and Ctrl+C.
+In VS Code, create transcript-claude-ai.txt in your project folder and paste it in with Ctrl+V.
+Search for “therer is two assignements” with Ctrl+F, and delete that line and everything below it. That leaves just assignment 1.
+Trim any page clutter at the very top, like sidebar or menu text, so the file starts with your first message.
+Save, then commit and push:
+   cd ~/dev/NCR_STRATEGY_TASK && git add transcript-claude-ai.txt && git commit -m "Add Claude.ai transcript" && git push
+It won’t have timestamps like the export would, but it’s complete, in order, and in English, and that’s what they asked for.
+
+Still request the export anyway. If it arrives before you need it, you can swap in the cleaner version later.
+
+If you do decide to submit only the Claude Code part, take the “Planning and review with Claude.ai” line out of the email, so it doesn’t link to a file that isn’t there.
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Claude finished the response
