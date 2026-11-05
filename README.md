@@ -88,4 +88,7 @@ that wrong silently changes prices at stores the manager does not run.
 - **Saved data is per browser.** Clearing site data or using another device
   starts again from the sample data. If saved data cannot be read, the app loads
   the sample data and shows a notice.
+- **Switching stores discards a price you are still typing.** An open price edit
+  is closed without saving when you pick another store, so it can never be saved
+  to the wrong store. There is no warning first.
 - **No item management.** Adding, removing or renaming items is out of scope.
