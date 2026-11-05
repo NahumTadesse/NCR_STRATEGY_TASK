@@ -33,8 +33,12 @@ export function ApplyToStoresDialog({ state, sourceStore, item, onConfirm, onClo
 
   const otherStores = STORES.filter((s) => s.id !== sourceStore.id)
   const newPrice = state.byStore[sourceStore.id][item.id].priceCents
-  // Keep picks in the same order as the store list.
-  const targets = otherStores.map((s) => s.id).filter((id) => picked.includes(id))
+  const alreadyMatches = (id: StoreId) => state.byStore[id][item.id].priceCents === newPrice
+  const allMatch = otherStores.every((s) => alreadyMatches(s.id))
+  // Only real changes count. Keep picks in the same order as the store list.
+  const targets = otherStores
+    .map((s) => s.id)
+    .filter((id) => picked.includes(id) && !alreadyMatches(id))
   const rows = previewPriceChange(state, sourceStore.id, item.id, targets)
 
   function toggle(id: StoreId, checked: boolean) {
@@ -49,10 +53,13 @@ export function ApplyToStoresDialog({ state, sourceStore, item, onConfirm, onClo
       onClose={onClose}
       data-store={sourceStore.id}
     >
-      <form method="dialog" onSubmit={(e) => {
-        e.preventDefault()
-        onConfirm(targets)
-      }}>
+      <form
+        method="dialog"
+        onSubmit={(e) => {
+          e.preventDefault()
+          onConfirm(targets)
+        }}
+      >
         <h2 id={titleId} className="dialog__title">Apply price to other stores</h2>
         <p>
           Set <strong>{item.name}</strong> to <strong>{formatCents(newPrice)}</strong>, the
@@ -62,24 +69,33 @@ export function ApplyToStoresDialog({ state, sourceStore, item, onConfirm, onClo
 
         <fieldset className="dialog__stores">
           <legend>Choose stores to update</legend>
-          {otherStores.map((s) => (
-            <label key={s.id} className="dialog__store">
-              <input
-                type="checkbox"
-                checked={picked.includes(s.id)}
-                onChange={(e) => toggle(s.id, e.target.checked)}
-              />
-              {s.name}
-              <span className="dialog__muted">
-                now {formatCents(state.byStore[s.id][item.id].priceCents)}
-              </span>
-            </label>
-          ))}
+          {otherStores.map((s) => {
+            const current = state.byStore[s.id][item.id].priceCents
+            const same = alreadyMatches(s.id)
+            return (
+              <label key={s.id} className={same ? 'dialog__store is-disabled' : 'dialog__store'}>
+                <input
+                  type="checkbox"
+                  checked={!same && picked.includes(s.id)}
+                  disabled={same}
+                  onChange={(e) => toggle(s.id, e.target.checked)}
+                />
+                {s.name}
+                <span className="dialog__muted">
+                  {same ? `Already ${formatCents(current)}` : `now ${formatCents(current)}`}
+                </span>
+              </label>
+            )
+          })}
         </fieldset>
 
         <h3 className="dialog__subtitle">Preview</h3>
         {rows.length === 0 ? (
-          <p className="dialog__muted">No stores chosen yet. Nothing will change.</p>
+          <p className="dialog__muted">
+            {allMatch
+              ? `Every other store already charges ${formatCents(newPrice)}. Nothing to change.`
+              : 'No stores chosen yet. Nothing will change.'}
+          </p>
         ) : (
           <table className="preview-table">
             <thead>
@@ -94,11 +110,7 @@ export function ApplyToStoresDialog({ state, sourceStore, item, onConfirm, onClo
                 <tr key={row.storeId}>
                   <th scope="row">{storeName(row.storeId)}</th>
                   <td className="num">{formatCents(row.beforeCents)}</td>
-                  <td className="num">
-                    {row.beforeCents === row.afterCents
-                      ? 'No change'
-                      : formatCents(row.afterCents)}
-                  </td>
+                  <td className="num">{formatCents(row.afterCents)}</td>
                 </tr>
               ))}
             </tbody>

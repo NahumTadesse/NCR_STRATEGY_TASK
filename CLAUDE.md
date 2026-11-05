@@ -36,6 +36,10 @@ price or availability for their selected store. 4 locations, sample data only.
   unavailable instead). Show invalid input as an inline error, never an alert.
 - **Apply dialog** uses the selected store's *saved* price: save first, then open.
   Recompute the preview at confirm time.
+- **Apply dialog stores** already at the new price are disabled and labeled
+  "Already $X.XX"; the confirm count includes only real changes.
+- **Multiple tabs:** other tabs' saves are picked up; last save wins. Note this
+  in the README.
 - **Selected store** is remembered in localStorage; defaults to the first store.
 - **Recent changes** list (store, item, before, after, time) with undo for the
   most recent change only (slice 8).

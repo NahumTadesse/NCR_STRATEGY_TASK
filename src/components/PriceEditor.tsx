@@ -57,9 +57,9 @@ export function PriceEditor({ itemName, storeName, priceCents, onSave, onApplyTo
           type="button"
           className="link-button"
           onClick={onApplyToOthers}
-          aria-label={`Apply ${storeName} price of ${itemName} to other stores`}
+          aria-label={`Apply to other stores: ${itemName} price from ${storeName}`}
         >
-          Other stores
+          Apply to other stores
         </button>
       </span>
     )
