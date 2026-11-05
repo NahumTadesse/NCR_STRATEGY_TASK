@@ -302,3 +302,32 @@
   .store-header__picker { flex-direction: row; align-items: center; gap: var(--space-2); }
   .store-header__picker select { min-width: 10rem; padding-block: 6px; }
 }
+
+/* ---------- Recent changes and sample data panels ---------- */
+.panel { margin-top: var(--space-6); }
+.panel__title { margin: 0 0 var(--space-3); font-size: var(--text-lg); font-weight: 650; }
+.panel__empty { margin: 0 0 var(--space-3); color: var(--ink-muted); }
+.panel--quiet { padding-top: var(--space-5); border-top: 1px solid var(--rule); }
+.table-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
+.history-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.history-table th,
+.history-table td { padding: var(--space-2) var(--space-3); text-align: left; vertical-align: top; border-top: 1px solid var(--rule); }
+.history-table thead th { border-top: 0; font-weight: 600; color: var(--ink-muted); background: var(--surface-sunk); }
+.history-table tbody + tbody tr:first-child > * { border-top-color: var(--rule-strong); }
+.history-table tbody th { font-weight: 600; }
+.history-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.history-table__time { color: var(--ink-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.history-table__kind { display: block; font-weight: 400; color: var(--ink-muted); }
+.history-table td.history-table__action { text-align: right; white-space: nowrap; }
+.history-table .is-undone td,
+.history-table .is-undone th { color: var(--ink-muted); }
+.history-table .is-undone .num { text-decoration: line-through; }
+.tag { display: inline-block; padding: 1px var(--space-2); font-size: var(--text-sm); font-weight: 600; color: var(--ink-muted); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); }
+
+.confirm { padding: var(--space-4); background: var(--surface); border: 1px solid var(--rule-strong); border-left: 4px solid var(--stop); border-radius: var(--radius-sm); }
+.confirm__text { margin: 0 0 var(--space-3); max-width: 60ch; }
+.confirm__actions { display: flex; gap: var(--space-2); }
+.button--danger { color: #fff; background: var(--stop); border-color: var(--stop); }
+.button--danger:hover { background: var(--stop); filter: brightness(0.92); }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

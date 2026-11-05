@@ -2,6 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import { ApplyToStoresDialog } from './components/ApplyToStoresDialog'
 import { MenuTable } from './components/MenuTable'
+import { RecentChanges } from './components/RecentChanges'
+import { ResetSampleData } from './components/ResetSampleData'
 import { StoreHeader } from './components/StoreHeader'
 import { formatCents } from './domain/money'
 import { STORES } from './domain/seed'
@@ -15,7 +17,7 @@ function App() {
   const { state } = menu
   const store = STORES.find((s) => s.id === state.selectedStoreId) ?? STORES[0]
   const [applyItemId, setApplyItemId] = useState<ItemId | null>(null)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState<{ text: string; tone: 'ok' | 'warn' } | null>(null)
   const applyItem = state.items.find((i) => i.id === applyItemId)
 
   function confirmApply(itemId: ItemId, targets: StoreId[]) {
@@ -24,11 +26,31 @@ function App() {
     const item = state.items.find((i) => i.id === itemId)
     if (item && rows.length > 0) {
       const names = rows.map((r) => STORES.find((s) => s.id === r.storeId)?.name ?? r.storeId)
-      setMessage(
-        `${item.name} is now ${formatCents(rows[0].afterCents)} at ${listFormat.format(names)}.`,
-      )
+      setMessage({
+        text: `${item.name} is now ${formatCents(rows[0].afterCents)} at ${listFormat.format(names)}.`,
+        tone: 'ok',
+      })
     }
     setApplyItemId(null)
+  }
+
+  function undo() {
+    const latest = menu.history[0]
+    const name = state.items.find((i) => i.id === latest?.itemId)?.name ?? 'The item'
+    const result = menu.undo()
+    setMessage(
+      result.ok
+        ? { text: `Undid the last change to ${name}.`, tone: 'ok' }
+        : {
+            text: `Could not undo. ${name} was changed again since then, possibly in another tab.`,
+            tone: 'warn',
+          },
+    )
+  }
+
+  function resetSampleData() {
+    menu.resetSampleData()
+    setMessage({ text: `Sample data restored at all ${STORES.length} stores.`, tone: 'ok' })
   }
 
   return (
@@ -48,7 +70,9 @@ function App() {
         <p className="page__intro">
           Changes on this page apply to <strong>{store.name}</strong> only.
         </p>
-        <p className="page__message" role="status">{message}</p>
+        <p className={message?.tone === 'warn' ? 'notice' : 'page__message'} role="status">
+          {message?.text}
+        </p>
         {/* key resets any open edit when the store changes */}
         <MenuTable
           key={store.id}
@@ -58,10 +82,17 @@ function App() {
           onSetPrice={menu.setPrice}
           onSetAvailability={menu.setAvailability}
           onApplyToOthers={(itemId) => {
-            setMessage('')
+            setMessage(null)
             setApplyItemId(itemId)
           }}
         />
+        <RecentChanges
+          history={menu.history}
+          items={state.items}
+          canUndo={menu.canUndo}
+          onUndo={undo}
+        />
+        <ResetSampleData storeCount={STORES.length} onReset={resetSampleData} />
       </main>
       {applyItem && (
         <ApplyToStoresDialog
