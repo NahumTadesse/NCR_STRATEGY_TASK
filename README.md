@@ -3,6 +3,8 @@
 A small app for a Harbor Street Kitchen store manager (4 locations) to view the
 menu and change an item's price or availability at their store.
 
+Live demo: https://harbor-street-kitchen-menu.vercel.app/
+
 All data is sample data saved in this browser's localStorage. There is no backend.
 
 ## Run it
