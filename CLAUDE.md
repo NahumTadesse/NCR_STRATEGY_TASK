@@ -9,7 +9,8 @@ price or availability for their selected store. 4 locations, sample data only.
 - Work in small slices. After each slice run `npm run lint` and `npm run build`
   (and `npm test` once Vitest exists) and report results honestly.
 - Ask before deleting files or installing new packages. Also ask before npm
-  override flags such as `--legacy-peer-deps` or `--force`.
+  override flags such as `--legacy-peer-deps` or `--force`, and before running
+  `npx` or any temporary install.
 - The 40-line limit covers the whole turn, including tool output. Trim command
   output with `tail`, `head` or `--stat`.
 - Work only inside this project folder.

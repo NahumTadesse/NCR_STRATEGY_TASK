@@ -7,10 +7,11 @@ interface Props {
   storeName: string
   priceCents: number
   onSave: (priceCents: number) => void
+  onApplyToOthers: () => void
 }
 
 /** Shows a price with an Edit button; editing validates inline before saving. */
-export function PriceEditor({ itemName, storeName, priceCents, onSave }: Props) {
+export function PriceEditor({ itemName, storeName, priceCents, onSave, onApplyToOthers }: Props) {
   const [draft, setDraft] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const errorId = useId()
@@ -51,6 +52,14 @@ export function PriceEditor({ itemName, storeName, priceCents, onSave }: Props) 
           aria-label={`Edit price of ${itemName} at ${storeName}`}
         >
           Edit
+        </button>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onApplyToOthers}
+          aria-label={`Apply ${storeName} price of ${itemName} to other stores`}
+        >
+          Other stores
         </button>
       </span>
     )

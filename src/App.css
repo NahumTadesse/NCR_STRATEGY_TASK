@@ -69,3 +69,20 @@
   .price-form__row { flex-wrap: wrap; justify-content: flex-end; }
   .store-header__picker select { min-width: 0; width: 100%; }
 }
+
+.page__message:empty { display: none; }
+.page__message { background: var(--on-bg); color: var(--on); border-radius: 8px; padding: 8px 12px; font-weight: 600; }
+
+.dialog { width: min(32rem, calc(100vw - 32px)); border: 0; border-top: 6px solid var(--accent); border-radius: 10px; padding: 20px; color: var(--text); background: var(--surface); }
+.dialog::backdrop { background: rgb(0 0 0 / 0.45); }
+.dialog__title { margin: 0 0 8px; font-size: 1.2rem; }
+.dialog__subtitle { margin: 16px 0 6px; font-size: 1rem; }
+.dialog__muted { color: var(--muted); font-size: 0.85rem; }
+.dialog__stores { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin: 0; }
+.dialog__store { display: flex; gap: 8px; align-items: center; padding: 6px 0; }
+.dialog__store .dialog__muted { margin-left: auto; }
+.dialog__actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.button:disabled { opacity: 0.5; cursor: not-allowed; }
+.preview-table { width: 100%; border-collapse: collapse; }
+.preview-table th, .preview-table td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--border); }
+.preview-table .num { text-align: right; font-variant-numeric: tabular-nums; }

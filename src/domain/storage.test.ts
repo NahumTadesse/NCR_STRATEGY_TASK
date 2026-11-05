@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createSeedState } from './seed'
-import { clearState, loadState, parseState, saveState, STORAGE_KEY } from './storage'
+import { clearState, loadState, parseState, parseStoredText, saveState, STORAGE_KEY } from './storage'
 import type { KeyValueStorage } from './storage'
 import { selectStore, setAvailability, setPrice } from './updates'
 
@@ -151,5 +151,14 @@ describe('saveState and clearState', () => {
     saveState(setPrice(createSeedState(), 'downtown', 'fries', 599), storage)
     expect(clearState(storage)).toBe(true)
     expect(loadState(storage).status).toBe('empty')
+  })
+})
+
+describe('parseStoredText', () => {
+  it('parses saved text and returns null for junk', () => {
+    const state = setPrice(createSeedState(), 'uptown', 'fries', 599)
+    expect(parseStoredText(JSON.stringify(state))).toEqual(state)
+    expect(parseStoredText('{oops')).toBeNull()
+    expect(parseStoredText('{}')).toBeNull()
   })
 })

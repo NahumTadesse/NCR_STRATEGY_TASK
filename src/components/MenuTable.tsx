@@ -9,9 +9,10 @@ interface Props {
   menu: StoreMenu
   onSetPrice: (itemId: ItemId, priceCents: number) => void
   onSetAvailability: (itemId: ItemId, available: boolean) => void
+  onApplyToOthers: (itemId: ItemId) => void
 }
 
-export function MenuTable({ store, items, menu, onSetPrice, onSetAvailability }: Props) {
+export function MenuTable({ store, items, menu, onSetPrice, onSetAvailability, onApplyToOthers }: Props) {
   return (
     <div className="table-wrap">
       <table className="menu-table">
@@ -39,6 +40,7 @@ export function MenuTable({ store, items, menu, onSetPrice, onSetAvailability }:
                       storeName={store.name}
                       priceCents={entry.priceCents}
                       onSave={(cents) => onSetPrice(item.id, cents)}
+                      onApplyToOthers={() => onApplyToOthers(item.id)}
                     />
                   </td>
                   <td>

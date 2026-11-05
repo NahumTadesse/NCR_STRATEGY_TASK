@@ -99,6 +99,15 @@ export function parseState(raw: unknown): AppState | null {
   }
 }
 
+/** Parse the raw stored string (from getItem or a storage event). Never throws. */
+export function parseStoredText(text: string): AppState | null {
+  try {
+    return parseState(JSON.parse(text))
+  } catch {
+    return null
+  }
+}
+
 /** Load saved state. Never throws; falls back to fresh seed data. */
 export function loadState(storage: KeyValueStorage | null = defaultStorage()): LoadResult {
   if (!storage) return { state: createSeedState(), status: 'unavailable' }
@@ -111,14 +120,7 @@ export function loadState(storage: KeyValueStorage | null = defaultStorage()): L
   }
   if (text === null) return { state: createSeedState(), status: 'empty' }
 
-  let raw: unknown
-  try {
-    raw = JSON.parse(text)
-  } catch {
-    return { state: createSeedState(), status: 'invalid' }
-  }
-
-  const state = parseState(raw)
+  const state = parseStoredText(text)
   return state ? { state, status: 'stored' } : { state: createSeedState(), status: 'invalid' }
 }
 
